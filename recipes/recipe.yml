@@ -10,14 +10,20 @@ base-image: ghcr.io/ublue-os/bluefin-nvidia-open
 image-version: latest # latest is also supported if you want new updates ASAP
 
 modules:
-  - type: rpm-ostree
-    remove:
-      - fish
-
   - type: script
     snippets:
       - "rm -f /etc/profile.d/90-bluefin-starship.sh"
       - "rm -f /usr/bin/starship"
+
+  - type: dnf
+    remove:
+      packages:
+        - tailscale
+        - fish
+  - type: systemd
+    system:
+      disabled:
+        - tailscaled.service
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
